@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Proyecto Horizonte — Guía del Jugador</title>
+
+  <style>
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: #4a463d;
+      color: #211f1a;
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    body {
+      counter-reset: page;
+    }
+
+    .page {
+      position: relative;
+      width: 210mm;
+      min-height: 297mm;
+      margin: 12mm auto;
+      padding: 24mm 23mm 22mm;
+      overflow: hidden;
+      background-color: #e7d5a8;
+      border: 1px solid #8c7b56;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+      page-break-after: always;
+      break-after: page;
+    }
+
+    .page:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: 7mm;
+      pointer-events: none;
+      border: 1px solid rgba(74, 59, 34, 0.4);
+    }
+
+    .page::after {
+      content: "";
+      position: absolute;
+      top: 12mm;
+      right: 12mm;
+      bottom: 12mm;
+      left: 12mm;
+      pointer-events: none;
+      border: 1px dashed rgba(74, 59, 34, 0.2);
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      color: #181713;
+      font-size: 35pt;
+      line-height: 1;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin-bottom: 10mm;
+      padding-bottom: 4mm;
+      color: #252218;
+      font-size: 24pt;
+      line-height: 1.1;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid #7b2c26;
+    }
+
+    p {
+      margin-bottom: 5mm;
+      font-size: 12.6pt;
+      line-height: 1.62;
+      text-align: justify;
+    }
+
+    strong {
+      color: #181713;
+    }
+
+    .mono {
+      font-family: "Courier New", Courier, monospace;
+    }
+
+    .hazard-strip {
+      position: absolute;
+      right: 0;
+      left: 0;
+      z-index: 5;
+      height: 18mm;
+      background: repeating-linear-gradient(
+        135deg,
+        #d8a900 0,
+        #d8a900 15mm,
+        #171713 15mm,
+        #171713 30mm
+      );
+      border-top: 2px solid #171713;
+      border-bottom: 2px solid #171713;
+    }
+
+    .hazard-strip.top {
+      top: 0;
+    }
+
+    .hazard-strip.bottom {
+      bottom: 0;
+    }
+
+    .cover {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32mm 24mm;
+      text-align: center;
+      background-color: #dcc48c;
+    }
+
+    .cover::before {
+      inset: 25mm 14mm;
+      border: 2px solid rgba(46, 38, 23, 0.58);
+    }
+
+    .cover::after {
+      top: 31mm;
+      right: 20mm;
+      bottom: 31mm;
+      left: 20mm;
+      border: 1px dashed rgba(46, 38, 23, 0.35);
+    }
+
+    .cover-inner {
+      position: relative;
+      z-index: 3;
+      width: 100%;
+      padding: 23mm 14mm;
+      border-top: 3px double #312c20;
+      border-bottom: 3px double #312c20;
+    }
+
+    .document-code {
+      margin-bottom: 15mm;
+      color: #514a38;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 10pt;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .cover h1 {
+      max-width: 160mm;
+      margin: 0 auto 8mm;
+      font-size: 39pt;
+      line-height: 1.05;
+    }
+
+    .cover-location {
+      margin: 0 0 6mm;
+      color: #403a2d;
+      font-size: 17pt;
+      letter-spacing: 1.5px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .cover-guide {
+      display: inline-block;
+      margin-top: 7mm;
+      padding: 4mm 9mm;
+      color: #f1e5c5;
+      background-color: #25231d;
+      border: 1px solid #0e0e0c;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 14pt;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .stamp {
+      position: absolute;
+      right: 17mm;
+      bottom: 33mm;
+      z-index: 6;
+      display: flex;
+      width: 39mm;
+      height: 39mm;
+      align-items: center;
+      justify-content: center;
+      color: #8f251f;
+      border: 3px solid #8f251f;
+      border-radius: 50%;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 8.5pt;
+      font-weight: bold;
+      line-height: 1.1;
+      letter-spacing: 1px;
+      text-align: center;
+      text-transform: uppercase;
+      transform: rotate(-11deg);
+    }
+
+    .stamp::before {
+      content: "";
+      position: absolute;
+      inset: 3mm;
+      border: 1px solid #8f251f;
+      border-radius: 50%;
+    }
+
+    .stamp span {
+      position: relative;
+      z-index: 2;
+      width: 28mm;
+    }
+
+    .section-label {
+      margin-bottom: 6mm;
+      color: #765f31;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 9pt;
+      font-weight: bold;
+      letter-spacing: 1.7px;
+      text-transform: uppercase;
+    }
+
+    .lead {
+      font-size: 14pt;
+      line-height: 1.65;
+    }
+
+    .highlight {
+      margin: 8mm 0;
+      padding: 6mm 7mm;
+      background-color: rgba(91, 68, 29, 0.08);
+      border-left: 4px solid #7b2c26;
+      font-size: 13pt;
+      font-style: italic;
+      line-height: 1.55;
+    }
+
+    .radio-note {
+      margin: 9mm 0;
+      padding: 6mm;
+      background-color: #d6c08b;
+      border: 1px solid #887348;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 11pt;
+      line-height: 1.5;
+    }
+
+    .short-line {
+      margin-bottom: 3mm;
+      font-size: 13pt;
+      text-align: left;
+    }
+
+    .closing-page {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 26mm;
+      text-align: center;
+    }
+
+    .closing-page .content {
+      width: 100%;
+      max-width: 155mm;
+    }
+
+    .closing-page h2 {
+      display: inline-block;
+      margin-bottom: 15mm;
+      padding: 0 0 4mm;
+      font-size: 28pt;
+      border-bottom: 2px solid #7b2c26;
+    }
+
+    .closing-page p {
+      font-size: 15pt;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .closing-page .command {
+      margin: 9mm 0;
+      color: #7b2c26;
+      font-size: 22pt;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .closing-page .farewell {
+      margin-top: 16mm;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 17pt;
+      font-weight: bold;
+      letter-spacing: 1.5px;
+    }
+
+    .page-number {
+      position: absolute;
+      right: 20mm;
+      bottom: 10mm;
+      z-index: 4;
+      color: #665a40;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 8pt;
+      letter-spacing: 1px;
+    }
+
+    @media print {
+      html,
+      body {
+        width: 210mm;
+        background: none;
+      }
+
+      .page {
+        width: 210mm;
+        height: 297mm;
+        min-height: 297mm;
+        margin: 0;
+        border: none;
+        box-shadow: none;
+      }
+
+      .page:last-child {
+        page-break-after: auto;
+      }
+
+      * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- PÁGINA 1: PORTADA -->
+  <section class="page cover">
+    <div class="hazard-strip top"></div>
+    <div class="hazard-strip bottom"></div>
+
+    <div class="cover-inner">
+      <div class="document-code">Documento de orientación comunitaria</div>
+
+      <h1>PROYECTO HORIZONTE</h1>
+
+      <p class="cover-location">Grey Falls, Ashmoor District</p>
+
+      <div class="cover-guide">Guía del Jugador</div>
+    </div>
+
+    <div class="stamp">
+      <span>Documento<br>oficial<br>Grey Falls</span>
+    </div>
+  </section>
+
+  <!-- PÁGINA 2: BIENVENIDA -->
+  <section class="page">
+    <div class="content">
+      <div class="section-label">Proyecto Horizonte · Guía del jugador</div>
+
+      <h2>Bienvenido a Grey Falls</h2>
+
+      <p class="lead">
+        Grey Falls es una pequeña ciudad del Ashmoor District, un lugar donde casi todos se conocen por su nombre. Aquí las rutinas importan: el café de la mañana en la cafetería del centro, las compras del fin de semana, el partido escolar de los viernes, las conversaciones en la estación de servicio y los saludos al cruzarse por la calle.
+      </p>
+
+      <p>
+        No es una ciudad rica, ni especialmente importante. Pero es hogar para quienes viven en ella.
+      </p>
+
+      <p>
+        En las afueras se encuentra Helix Dynamics, una empresa de investigación biomédica que durante años ha dado trabajo a muchos habitantes del pueblo. Para la mayoría, no es más que otra fuente de empleo y desarrollo para la comunidad.
+      </p>
+
+      <p>
+        Sin embargo, en los últimos días han empezado a circular rumores difíciles de ignorar. Se habla de ambulancias entrando y saliendo de la planta a horas poco habituales. Algunos dicen que hubo un accidente industrial. Otros aseguran que no es más que un rumor exagerado.
+      </p>
+
+      <div class="radio-note">
+        &lt;WBLN 91.2&gt; ...situación bajo control, se recomienda a los residentes continuar con normalidad... &lt;interferencia&gt;
+      </div>
+
+      <p>
+        Y esta noche, como tantas otras, hay una razón para celebrar.
+      </p>
+    </div>
+
+    <div class="page-number">02 / 04</div>
+  </section>
+
+  <!-- PÁGINA 3: INICIO DE LA HISTORIA -->
+  <section class="page">
+    <div class="content">
+      <div class="section-label">Registro inicial · Grey Falls</div>
+
+      <h2>¿Cómo comienza la historia?</h2>
+
+      <p class="lead">
+        Todo empieza una tarde de verano.
+      </p>
+
+      <p>
+        Uno de los vecinos de Grey Falls ha organizado una barbacoa en una cabaña junto al lago, a pocos minutos del pueblo. No es un evento formal: hay música, comida, bebidas, risas y conversaciones que se mezclan mientras cae el sol.
+      </p>
+
+      <p class="short-line">Algunos se conocen desde hace años.</p>
+      <p class="short-line">Otros apenas se han visto un par de veces.</p>
+      <p class="short-line">Quizás trabajen juntos.</p>
+      <p class="short-line">
+        Quizás sean familiares, amigos de amigos o simplemente coincidieron porque alguien los invitó.
+      </p>
+
+      <p>
+        Mientras la noche avanza, llegan noticias confusas desde la ciudad.
+      </p>
+
+      <p class="short-line">Al principio nadie les presta demasiada atención.</p>
+      <p class="short-line">Una patrulla pasa por la carretera a toda velocidad.</p>
+      <p class="short-line">Alguien comenta que hubo un accidente cerca de la planta.</p>
+
+      <div class="radio-note">
+        &lt;WBLN 91.2&gt; ...pedimos a los residentes evitar la Ruta 9 hasta nuevo aviso... 
+          repito, evitar la Ruta 9... &lt;interferencia&gt; ...situación bajo control...
+      </div>
+
+      <p>
+        Todavía nadie imagina que esa será la última noche en la que el mundo se sentirá completamente normal.
+      </p>
+    </div>
+
+    <div class="page-number">03 / 04</div>
+  </section>
+
+  <!-- PÁGINA 4: CIERRE -->
+  <section class="page closing-page">
+    <div class="content">
+      <div class="section-label">Mensaje final</div>
+
+      <h2>Un último consejo</h2>
+
+      <p>No hay guion.</p>
+
+      <p class="command">Solo lo que decidan hacer con el tiempo que les quede.</p>
+
+      <p>
+        Las mejores sesiones no serán aquellas donde disparen más o acumulen más recursos.
+      </p>
+
+      <p>
+        Serán aquellas que, meses después, todavía recuerden porque un grupo de personas comunes decidió seguir adelante cuando parecía que todo estaba a punto de desaparecer.
+      </p>
+
+      <p class="farewell">Nos vemos en Grey Falls.</p>
+    </div>
+
+    <div class="page-number">04 / 04</div>
+  </section>
+
+</body>
+</html>
